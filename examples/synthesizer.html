@@ -11,8 +11,9 @@
     <script language="javascript" src="js/init.js"></script>
 
     <!-- Load DSP.js -->
-    <script src="../dsp.js"></script>
+    <script src="../dist/DSP.js"></script>
     <script>
+      console.log(DSP)
       $(function() {
         // Amplitude 
         $('#amp'   ).slider({ orientation: 'vertical', range: 'min', value: 0.7,  min: 0,    max: 1,    step: 0.01, slide: changeAmplitude });
@@ -147,7 +148,7 @@
         osc2_amplitude *= amplitude;
       };
 
-      var filter = new IIRFilter2(0, 0, 0, sampleRate);
+      var filter = new DSP.IIRFilter2(0, 0, 0, sampleRate);
 
       var changeFilter = function() {
         filter.set($('#cutoff').slider('option', 'value'), $('#res').slider('option', 'value'));
@@ -314,10 +315,10 @@
           }
 
           // Flush buffer  
-          a.mozWriteAudio([]);
+         // a.mozWriteAudio([]);
           
             // Write next audio frame
-            a.mozWriteAudio(osc.signal);
+           // a.mozWriteAudio(osc.signal);
 
           writeCount++;
 
@@ -338,7 +339,7 @@
         size(512, 200);
         
         // setup oscillator to hold the merged signal of osc1 and osc2
-        osc = new Oscillator(osc1_waveform, 440, 0, bufferSize, sampleRate);
+        osc = new DSP.Oscillator(osc1_waveform, 440, 0, bufferSize, sampleRate);
         
         setInterval(audioWriter, bufferTime); // start audioWriter timer        
         frameRate(10);
@@ -382,10 +383,10 @@
             // Add oscillator to the pool
             var index = oscPool.length;
             
-            var osc1 = new Oscillator(osc1_waveform, osc1_frequency, osc1_amplitude, bufferSize, sampleRate);
-            var osc2 = new Oscillator(osc2_waveform, osc2_frequency, osc2_amplitude, bufferSize, sampleRate);
-            var adsr = new ADSR($('#A').slider('option', 'value'), $('#D').slider('option', 'value'), $('#S').slider('option', 'value'), bufferTime / 1000, $('#R').slider('option', 'value'), sampleRate);              
-            var fadsr = new ADSR($('#FA').slider('option', 'value'), $('#FD').slider('option', 'value'), $('#FS').slider('option', 'value'), bufferTime / 1000, $('#FR').slider('option', 'value'), sampleRate);
+            var osc1 = new DSP.Oscillator(osc1_waveform, osc1_frequency, osc1_amplitude, bufferSize, sampleRate);
+            var osc2 = new DSP.Oscillator(osc2_waveform, osc2_frequency, osc2_amplitude, bufferSize, sampleRate);
+            var adsr = new DSP.ADSR($('#A').slider('option', 'value'), $('#D').slider('option', 'value'), $('#S').slider('option', 'value'), bufferTime / 1000, $('#R').slider('option', 'value'), sampleRate);              
+            var fadsr = new DSP.ADSR($('#FA').slider('option', 'value'), $('#FD').slider('option', 'value'), $('#FS').slider('option', 'value'), bufferTime / 1000, $('#FR').slider('option', 'value'), sampleRate);
             
             oscPool[index] = {};
             oscPool[index].osc1 = osc1;
